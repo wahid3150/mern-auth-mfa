@@ -170,7 +170,7 @@ export const getOtpHtml = ({ email, otp }) => {
             </tr>
             <!-- Footer -->
             <tr>
-              <td class="footer">© 2025 Authentication App. All rights reserved.</td>
+              <td class="footer">© 2026 Authentication App. All rights reserved.</td>
             </tr>
             <tr>
               <td height="16" aria-hidden="true"></td>
