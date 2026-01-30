@@ -10,6 +10,7 @@ import {
   getOtpHtml,
   getVerifyEmailHtml,
 } from "../verifyEmail/verificationMailTemplate.js";
+import { generateToken } from "../config/generateToken.js";
 
 export const registerUser = TryCatch(async (req, res) => {
   const sanitizedBody = sanitize(req.body);
@@ -168,5 +169,40 @@ export const loginUser = TryCatch(async (req, res) => {
   res.json({
     message:
       "If your email is valid, an otp has been sent. It will be expires in 5 minutes",
+  });
+});
+
+export const verifyOtp = TryCatch(async (req, res) => {
+  const { email, otp } = req.body;
+
+  if (!email || !otp) {
+    return res.status(400).json({
+      message: "Please provide all details",
+    });
+  }
+
+  const otpKey = `otp:${email}`;
+
+  const storedOtpString = await redisClient.get(otpKey);
+  if (!storedOtpString) {
+    return res.status(400).json({
+      message: "Otp expired",
+    });
+  }
+
+  const storedOtp = storedOtpString;
+  if (storedOtp !== String(otp).trim()) {
+    return res.status(400).json({ message: "Invalid otp" });
+  }
+
+  await redisClient.del(otpKey);
+
+  let user = await User.findOne({ email });
+
+  const tokenData = await generateToken(user._id, res);
+
+  res.status(200).json({
+    message: `Welcome ${user.name}`,
+    user,
   });
 });
