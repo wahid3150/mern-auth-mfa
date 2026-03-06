@@ -5,6 +5,7 @@ import { createClient } from "redis";
 
 import userRoutes from "./routes/userRoutes.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express();
 connectDB();
@@ -26,6 +27,13 @@ redisClient
 //middleware
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  }),
+);
 
 app.use("/api/user", userRoutes);
 
