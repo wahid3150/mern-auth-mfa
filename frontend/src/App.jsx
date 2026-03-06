@@ -1,7 +1,23 @@
 import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import { ToastContainer } from "react-toastify";
+import VerifyOtp from "./pages/VerifyOtp";
 
 const App = () => {
-  return <div>APP</div>;
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/verifyotp" element={<VerifyOtp />} />
+        </Routes>
+        <ToastContainer />
+      </BrowserRouter>
+    </>
+  );
 };
 
 export default App;
