@@ -23,12 +23,13 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  async function logoutUser() {
+  async function logoutUser(navigate) {
     try {
       const { data } = await api.post("/api/user/logout");
       toast.success(data.message);
       setIsAuth(false);
       setUser(null);
+      navigate("/login");
     } catch (error) {
       toast.error("something went wrong");
     }
